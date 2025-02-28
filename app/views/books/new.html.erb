@@ -1,0 +1,25 @@
+<%= form_with model: @book do |f| %>
+    <div>
+      <label for="title">Title:</label>
+      <%= f.text_field :title %>
+    </div>
+  
+    <div>
+      <label for="author">Author:</label>
+      <%= f.text_field :author %>
+    </div>
+  
+    <div>
+      <label for="summary">Summary:</label>
+      <%= f.text_area :summary %>
+    </div>
+  
+    <div>
+      <label for="deadline">Deadline:</label>
+      <%= f.datetime_local_field :deadline %>
+    </div>
+  
+    <div>
+      <%= f.submit "Create Book" %>
+    </div>
+  <% end %>

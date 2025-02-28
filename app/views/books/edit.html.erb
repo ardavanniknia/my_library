@@ -1,0 +1,24 @@
+<h1>ویرایش کتاب</h1>
+
+<%= form_with model: @book, local: true do |form| %>
+  <div>
+    <%= form.label :title, "عنوان کتاب:" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :author, "نویسنده:" %>
+    <%= form.text_field :author %>
+  </div>
+
+  <div>
+    <%= form.label :summary, "خلاصه‌ی کتاب:" %>
+    <%= form.text_area :summary %>
+  </div>
+
+  <div>
+    <%= form.submit "ذخیره تغییرات" %>
+  </div>
+<% end %>
+
+<%= link_to "بازگشت به لیست کتاب‌ها", books_path %>

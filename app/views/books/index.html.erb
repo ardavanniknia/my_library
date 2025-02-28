@@ -1,0 +1,56 @@
+<h1>لیست کتاب‌ها</h1>
+
+<table border="1">
+  <tr>
+    <th>عنوان</th>
+    <th>نویسنده</th>
+    <th>خلاصه</th>
+    <th>ددلاین</th>
+    <th>زمان باقی‌مانده</th>
+    <th>عملیات</th>
+  </tr>
+
+  <% @books.each do |book| %>
+    <tr>
+      <td><%= book.title %></td>
+      <td><%= book.author %></td>
+      <td><%= book.summary %></td>
+      <td><%= book.deadline.strftime("%Y-%m-%d %H:%M") if book.deadline %></td>
+      <td>
+        <% if book.deadline %>
+          <span class="countdown" data-deadline="<%= book.deadline.iso8601 %>">در حال بارگذاری...</span>
+        <% else %>
+          بدون ددلاین
+        <% end %>
+      </td>
+      <td>
+        <%= link_to "ویرایش", edit_book_path(book) %> |
+       <%= button_to "حذف", book_path(book), method: :delete, data: { confirm: "آیا مطمئن هستید؟" }, class: "btn btn-danger" %>
+    </tr>
+  <% end %>
+</table>
+
+<%= link_to "افزودن کتاب جدید", new_book_path %>
+
+<script>
+  function updateCountdowns() {
+    document.querySelectorAll(".countdown").forEach(function (element) {
+      let deadline = new Date(element.dataset.deadline);
+      let now = new Date();
+      let diff = deadline - now;
+
+      if (diff <= 0) {
+        element.innerText = "مهلت تمام شد!";
+      } else {
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        element.innerText = `${days}روز ${hours}ساعت ${minutes}دقیقه ${seconds}ثانیه`;
+      }
+    });
+  }
+
+  setInterval(updateCountdowns, 1000);
+  updateCountdowns();
+</script>
