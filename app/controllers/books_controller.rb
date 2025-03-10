@@ -1,6 +1,15 @@
+require 'net/http'
+require 'json'
+
 class BooksController < ApplicationController
+  before_action :authenticate_user!
+
   def index
-    @books = Book.all
+    if params[:query].present?
+      @books = current_user.books.where("title LIKE ? OR author LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%")
+    else
+      @books = current_user.books
+    end
   end
 
   def new
@@ -8,38 +17,62 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.new(book_params)
+    @book = current_user.books.new(book_params)
+  
     if @book.save
-      redirect_to books_path, notice: "کتاب جدید با موفقیت اضافه شد!"
+      redirect_to books_path, notice: "Book added successfully!"
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @book = Book.find(params[:id])
+    @book = current_user.books.find(params[:id])
   end
 
   def update
-    @book = Book.find(params[:id])
+    @book = current_user.books.find(params[:id])
     if @book.update(book_params)
-      redirect_to books_path, notice: "کتاب با موفقیت ویرایش شد!"
+      redirect_to books_path, notice: "Book was successfully updated!"
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @book = Book.find(params[:id])
+    @book = current_user.books.find(params[:id])
     @book.destroy
     redirect_to books_path, notice: "Book was successfully deleted."
   end
   
   def show
-    @book = Book.find(params[:id])
+    @book = current_user.books.find(params[:id])
   end
 
+  def search
+    @results = [] # مقدار پیش‌فرض برای جلوگیری از nil
+
+    if params[:query].present?
+      @results = search_books(params[:query])
+    end
+  end
+  
   private
+  
+  def search_books(query)
+    url = "https://openlibrary.org/search.json?q=#{URI.encode_www_form_component(query)}"
+    response = Net::HTTP.get(URI(url))
+    puts "API Response: #{response}" # لاگ گرفتن از پاسخ API
+    data = JSON.parse(response)
+
+    data["docs"].map do |book|
+      {
+        title: book["title"],
+        author: book["author_name"]&.join(", "),
+        summary: book["first_sentence"]&.join(" ") || "No summary available."
+      }
+    end
+  end
 
   def book_params
     params.require(:book).permit(:title, :author, :summary, :deadline)

@@ -1,7 +1,16 @@
 <h1><%= @book.title %></h1>
+
 <p><strong>Author:</strong> <%= @book.author %></p>
 <p><strong>Summary:</strong> <%= @book.summary %></p>
-<p><strong>Deadline:</strong> <%= @book.deadline %></p>
 
-<%= link_to "Delete", book_path(@book), method: :delete, data: { confirm: "Are you sure?" } %>
-<%= link_to "Back to List", books_path %>
+<% if @book.deadline.present? %>
+  <p><strong>Deadline:</strong> <%= @book.deadline.strftime("%Y-%m-%d %H:%M") %></p>
+<% else %>
+  <p><strong>Deadline:</strong> No deadline set</p>
+<% end %>
+
+<hr>
+
+<%= link_to "Edit", edit_book_path(@book), class: "btn btn-primary" %>
+<%= link_to "Delete", book_path(@book), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+<%= link_to "Back to List", books_path, class: "btn btn-secondary" %>

@@ -1,6 +1,16 @@
-import "@hotwired/turbo-rails"
-import "controllers"
+import "@hotwired/turbo-rails";
+import Rails from "@rails/ujs"; // Rails UJS
+import "@rails/activestorage";
+import "controllers";
+import { application } from "controllers/application"; // Stimulus application
 
-import * as Rails from "https://cdn.jsdelivr.net/npm/@rails/ujs@7.0.0/lib/assets/compiled/rails-ujs.js";
-Rails.start();
-window.Rails = Rails; // برای اطمینان از دسترسی در کنسول
+// Fix Rails UJS globally
+if (!window._rails_loaded) {
+  Rails.start();
+  window._rails_loaded = true;
+}
+
+// Expose globally for debugging
+console.log("Rails UJS loaded:", Rails);
+window.Rails = Rails;
+window.Stimulus = application; // ✅ اضافه شد

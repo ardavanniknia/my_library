@@ -20,6 +20,6 @@
     </div>
   
     <div>
-      <%= f.submit "Create Book" %>
+      <%= f.submit @book.new_record? ? "Create Book" : "Update Book" %>
     </div>
   <% end %>

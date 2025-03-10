@@ -1,24 +1,29 @@
-<h1>ویرایش کتاب</h1>
+<h1>Edit Book</h1>
 
 <%= form_with model: @book, local: true do |form| %>
   <div>
-    <%= form.label :title, "عنوان کتاب:" %>
+    <%= form.label :title, "Title:" %>
     <%= form.text_field :title %>
   </div>
 
   <div>
-    <%= form.label :author, "نویسنده:" %>
+    <%= form.label :author, "Author:" %>
     <%= form.text_field :author %>
   </div>
 
   <div>
-    <%= form.label :summary, "خلاصه‌ی کتاب:" %>
+    <%= form.label :summary, "Summary:" %>
     <%= form.text_area :summary %>
   </div>
 
   <div>
-    <%= form.submit "ذخیره تغییرات" %>
+    <%= form.label :deadline, "Deadline:" %>
+    <%= form.datetime_local_field :deadline %>
+  </div>
+
+  <div>
+    <%= form.submit "Save Changes" %>
   </div>
 <% end %>
 
-<%= link_to "بازگشت به لیست کتاب‌ها", books_path %>
+<%= link_to "Back to Book List", books_path %>

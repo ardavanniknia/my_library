@@ -1,0 +1,25 @@
+<h1>Search Results</h1>
+
+<%= form_with url: search_books_path, method: :get, local: true do %>
+  <input type="text" name="query" placeholder="Search for books..." value="<%= params[:query] %>">
+  <button type="submit">Search</button>
+<% end %>
+
+<ul>
+  <% @results.each do |book| %>
+    <li>
+      <strong>Title:</strong> <%= book[:title] %><br>
+      <strong>Author:</strong> <%= book[:author] %><br>
+      <strong>Summary:</strong> <%= book[:summary] %><br>
+
+      <!-- دکمه افزودن به کتابخانه شخصی -->
+      <%= form_with url: books_path, method: :post, local: true do %>
+        <input type="hidden" name="book[title]" value="<%= book[:title] %>">
+        <input type="hidden" name="book[author]" value="<%= book[:author] %>">
+        <input type="hidden" name="book[summary]" value="<%= book[:summary] %>">
+        <button type="submit">Add to My Library</button>
+      <% end %>
+    </li>
+    <hr>
+  <% end %>
+</ul>
