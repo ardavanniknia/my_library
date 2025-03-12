@@ -1,8 +1,8 @@
 import "@hotwired/turbo-rails";
 import Rails from "@rails/ujs"; // Rails UJS
 import "@rails/activestorage";
-import "controllers";
-import { application } from "controllers/application"; // Stimulus application
+import "controllers"; // لود کردن کنترلرها
+import "bootstrap";
 
 // Fix Rails UJS globally
 if (!window._rails_loaded) {
@@ -11,6 +11,5 @@ if (!window._rails_loaded) {
 }
 
 // Expose globally for debugging
-console.log("Rails UJS loaded:", Rails);
+console.log("🚀 Rails UJS loaded:", Rails);
 window.Rails = Rails;
-window.Stimulus = application; // ✅ اضافه شد

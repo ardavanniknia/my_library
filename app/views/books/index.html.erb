@@ -1,46 +1,42 @@
-<h1>Book List</h1>
+<div class="container mt-4">
+  <h2 class="text-center">Book List</h2>
 
-<!-- Search Form -->
-<%= form_with url: search_books_path, method: :get, local: true do %>
-  <input type="text" name="query" placeholder="Search by title or author..." value="<%= params[:query] %>">
-  <button type="submit">Search</button>
-<% end %>
+  <div class="d-flex justify-content-center mb-3">
+    <form class="d-flex w-50">
+      <input type="text" class="form-control me-2" placeholder="Search by title or author.">
+      <button class="btn btn-primary">Search</button>
+    </form>
+  </div>
 
-<table border="1" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Author</th>
-      <th>Summary</th>
-      <th>Deadline</th>
-      <th>Time Remaining</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @books.each do |book| %>
+  <table class="table table-bordered text-center">
+    <thead class="table-light">
       <tr>
-        <td><%= book.title %></td>
-        <td><%= book.author %></td>
-        <td><%= book.summary %></td>
-        <td><%= book.deadline.strftime("%Y-%m-%d") if book.deadline %></td>
-        <td>
-          <% if book.deadline %>
-            <span data-controller="countdown" 
-                data-countdown-deadline="<%= book.deadline.present? ? book.deadline.iso8601 : '' %>">
-              Loading...
-            </span>
-          <% else %>
-            No Deadline
-          <% end %>
-        </td>
-        <td>
-          <%= link_to "Edit", edit_book_path(book), class: "btn btn-warning" %>
-          <%= button_to "Delete", book_path(book), method: :delete, data: { confirm: "Are you sure?" }, "data-turbo" => "false", class: "btn btn-danger" %>
-        </td>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Summary</th>
+        <th>Deadline</th>
+        <th>Time Remaining</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @books.each do |book| %>
+        <tr>
+          <td><%= book.title %></td>
+          <td><%= book.author %></td>
+          <td><%= book.summary || "No summary available." %></td>
+          <td><%= book.deadline || "No Deadline" %></td>
+          <td><%= book.deadline.present? ? distance_of_time_in_words_to_now(book.deadline) : "No Deadline" %></td>
+          <td>
+            <%= link_to "Edit", edit_book_path(book), class: "btn btn-warning btn-sm w-100" %>
+            <%= link_to "Delete", book_path(book), method: :delete, class: "btn btn-danger btn-sm w-100", data: { confirm: "Are you sure?" } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Add New Book", new_book_path, class: "btn btn-primary" %>
+  <div class="text-center mt-4">
+    <%= link_to "Add New Book", new_book_path, class: "btn btn-primary btn-lg" %>
+  </div>
+</div>

@@ -9,7 +9,9 @@
     <%= csp_meta_tag %>
 
     <%= yield :head %>
-
+    <link 
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+      rel="stylesheet">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
@@ -19,34 +21,42 @@
   </head>
 
   <body>
-  <nav>
-    <ul>
-      <li><%= link_to "Home", root_path %></li>
-      <li><%= link_to "Books", books_path %></li>
-      <li><%= link_to "Add New Book", new_book_path %></li>
-      <li><%= link_to "Search Books", search_books_path %></li>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Books", books_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Add New Book", new_book_path, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "Search Books", search_books_path, class: "nav-link" %></li>
+            <% if user_signed_in? %>
+              <li class="nav-item"><%= link_to "Logout", destroy_user_session_path, method: :delete, class: "nav-link" %></li>
+            <% else %>
+              <li class="nav-item"><%= link_to "Login", new_user_session_path, class: "nav-link" %></li>
+              <li class="nav-item"><%= link_to "Sign Up", new_user_registration_path, class: "nav-link" %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-      <% if user_signed_in? %>
-        <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
-      <% else %>
-        <li><%= link_to "Login", new_user_session_path %></li>
-        <li><%= link_to "Sign Up", new_user_registration_path %></li>
+    <div class="container mt-4">
+      <% flash.each do |key, message| %>
+        <div class="alert <%= key == 'notice' ? 'alert-success' : 'alert-danger' %>"><%= message %></div>
       <% end %>
-    </ul>
-  </nav>
 
-  <% flash.each do |key, message| %>
-    <div class="flash <%= key %>"><%= message %></div>
-  <% end %>
-
-  <main>
-    <%= yield %>
-  </main>
+      <main>
+        <%= yield %>
+      </main>
+    </div>
     
-    <footer>
+    <footer class="text-center mt-4">
       <p>&copy; <%= Time.current.year %> My Library. All rights reserved.</p>
     </footer>
 
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
