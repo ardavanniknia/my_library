@@ -1,25 +1,31 @@
-<%= form_with model: @book do |f| %>
-    <div>
-      <label for="title">Title:</label>
-      <%= f.text_field :title %>
-    </div>
-  
-    <div>
-      <label for="author">Author:</label>
-      <%= f.text_field :author %>
-    </div>
-  
-    <div>
-      <label for="summary">Summary:</label>
-      <%= f.text_area :summary %>
-    </div>
-  
-    <div>
-      <label for="deadline">Deadline:</label>
-      <%= f.datetime_local_field :deadline %>
-    </div>
-  
-    <div>
-      <%= f.submit @book.new_record? ? "Create Book" : "Update Book" %>
-    </div>
-  <% end %>
+<div class="container mt-5">
+  <div class="card p-4 shadow-lg">
+    <h2 class="text-center mb-4"><%= @book.new_record? ? "Add New Book" : "Edit Book" %></h2>
+
+    <%= form_with model: @book, class: "needs-validation", novalidate: true do |f| %>
+      <div class="mb-3">
+        <%= f.label :title, class: "form-label" %>
+        <%= f.text_field :title, class: "form-control", placeholder: "Enter book title", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :author, class: "form-label" %>
+        <%= f.text_field :author, class: "form-control", placeholder: "Enter author's name", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :summary, class: "form-label" %>
+        <%= f.text_area :summary, class: "form-control", rows: 3, placeholder: "Write a short summary" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :deadline, class: "form-label" %>
+        <%= f.datetime_local_field :deadline, class: "form-control" %>
+      </div>
+
+      <div class="text-center">
+        <%= f.submit @book.new_record? ? "Create Book" : "Update Book", class: "btn btn-primary btn-lg w-100" %>
+      </div>
+    <% end %>
+  </div>
+</div>
